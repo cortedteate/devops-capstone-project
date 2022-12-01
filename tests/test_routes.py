@@ -162,6 +162,19 @@ class TestAccountService(TestCase):
         upd_data = response.get_json()
         self.assertEqual(upd_data["name"], "Carlos")
 
+    def test_delete_an_account(self):
+        """It delete update an account"""
+        # create an Account to delete
+        account = self._create_accounts(1)[0]
+        response = self.client.get(
+            f"/accounts/{account.id}", content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+         # delete the account    
+        response = self.client.delete(f"/accounts/{account.id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
 
 
 
