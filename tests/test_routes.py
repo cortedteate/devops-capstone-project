@@ -135,7 +135,6 @@ class TestAccountService(TestCase):
         data = response.get_json()
         self.assertEqual(data["name"], account.name)
 
-        
     def test_account_not_found(self):
         """It should an inexistent account"""
         account = self._create_accounts(1)[0]
@@ -143,3 +142,28 @@ class TestAccountService(TestCase):
             f"/accounts/{0}", content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_an_account(self):
+        """It should update an account"""
+        # create an Account to update
+        account = self._create_accounts(1)[0]
+        response = self.client.get(
+            f"/accounts/{account.id}", content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+         # update the account    
+        data = response.get_json()
+        data["name"] = "Carlos"
+
+        response = self.client.put(f"/accounts/{data['id']}", json=data)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        upd_data = response.get_json()
+        self.assertEqual(upd_data["name"], "Carlos")
+
+
+
+
+
+
