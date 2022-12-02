@@ -22,6 +22,7 @@ BASE_URL = "/accounts"
 
 HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
 
+
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
@@ -147,7 +148,7 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-         # update the account    
+        # update the account
         data = response.get_json()
         data["name"] = "Carlos"
 
@@ -159,7 +160,7 @@ class TestAccountService(TestCase):
 
     def test_account_not_found(self):
         """It should an inexistent account"""
-        account = self._create_accounts(1)[0]
+        self._create_accounts(1)[0]
         response = self.client.get(
             f"/accounts/{0}", content_type="application/json"
         )
@@ -174,7 +175,7 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-         # delete the account    
+        # delete the account
         response = self.client.delete(f"/accounts/{account.id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -182,18 +183,18 @@ class TestAccountService(TestCase):
         """It should Get a list of Accounts"""
         # create various accounts
         self._create_accounts(4)
-        response = self.client.get(f"/accounts")
-        
+        response = self.client.get('/accounts')
+
         # account list
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-          
-        # lenght of the list must match   
+
+        # lenght of the list must match
         data = response.get_json()
         self.assertEqual(len(data), 4)
-        
+
     def test_method_not_allowed(self):
         """It should not allow an illegal method call"""
-        resp = self.client.delete(f"/accounts")
+        resp = self.client.delete('/accounts')
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_security_hd(self):
